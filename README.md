@@ -1,4 +1,4 @@
-# Projeto Restaurante (Servidor)
+# Projeto Restaurante (Web)
 
 Este projeto tem como foco aprender e evoluir conceitos voltados ao Javascript/Typescript/Vuejs e desenvolvimento de novas técnicas de aprendizado.
 
