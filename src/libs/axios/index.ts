@@ -42,7 +42,9 @@ appInstance.interceptors.response.use((response: AxiosResponse) => response, res
 rootInstance.interceptors.response.use((response: AxiosResponse) => response, responseHandlerInterceptor)
 
 rootInstance.interceptors.request.use((request: AxiosRequestConfig) => {
-  request.baseURL = store.getters['tenant/customerUrl']
+  request.baseURL = store.getters['tenant/url']
+
+  request.headers.Authorization = store.getters['auth/bearerToken']
 
   return request
 })

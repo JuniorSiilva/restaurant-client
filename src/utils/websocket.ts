@@ -18,16 +18,14 @@ class WebSocketConnection extends Echo {
   private static getWebSocketConnection(): WebSocketConnection {
     window.io = require('socket.io-client')
 
-    console.log(store)
-
     return new WebSocketConnection({
       authEndpoint: process.env.VUE_APP_AUTH_ENDPOINT,
       broadcaster: process.env.VUE_APP_BROADCASTER,
       host: process.env.VUE_APP_HOST,
       auth: {
         headers: {
-          Authorization: store.getters['auth/bearerToken'],
           Tenant: store.getters['tenant/customer'],
+          Authorization: store.getters['auth/bearerToken'],
         },
       },
     })
@@ -42,8 +40,7 @@ class WebSocketConnection extends Echo {
   }
 
   public private(channel: string): Channel {
-    // getSubdomain()
-    return super.private('restaurante-1.' + channel)
+    return super.private(store.getters['tenant/customer'] + '.' + channel)
   }
 }
 

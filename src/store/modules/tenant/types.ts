@@ -6,7 +6,8 @@ interface State {
 
 interface Getters {
   customer(state: State): string | null
-  customerUrl(state: State): string
+  name(state: State): string
+  url(state: State): string
 }
 
 interface Mutations<S = State> {

@@ -10,8 +10,6 @@ export const actions: ActionTree<State, State> & Actions = {
       const { data } = await AuthService.login(credentials)
 
       commit(MutationTypes.SET_TOKEN, data.token)
-
-      return true
     } catch (e) {
       commit(MutationTypes.REMOVE_TOKEN, undefined)
       throw e
@@ -19,12 +17,8 @@ export const actions: ActionTree<State, State> & Actions = {
   },
 
   async [ActionTypes.LOGOUT]({ commit }) {
-    try {
-      await AuthService.logout()
-    } finally {
-      commit(MutationTypes.REMOVE_TOKEN, undefined)
-    }
+    await AuthService.logout()
 
-    return true
+    commit(MutationTypes.REMOVE_TOKEN, undefined)
   },
 }

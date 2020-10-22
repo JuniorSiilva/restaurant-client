@@ -17,8 +17,8 @@ interface Mutations<S = State> {
 }
 
 interface Actions {
-  [ActionTypes.LOGIN]({ commit }: AugmentedActionContext, credentials: Credential): Promise<boolean>
-  [ActionTypes.LOGOUT]({ commit }: AugmentedActionContext): Promise<boolean>
+  [ActionTypes.LOGIN]({ commit }: AugmentedActionContext, credentials: Credential): Promise<void>
+  [ActionTypes.LOGOUT]({ commit }: AugmentedActionContext): Promise<void>
 }
 
 interface Credential {

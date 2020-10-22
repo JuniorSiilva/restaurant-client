@@ -125,7 +125,7 @@ export default class SignIn extends Vue {
     this.vRemoveCustomer()
   }
 
-  vActionLogin!: (credentials: Credential) => Promise<boolean>
+  vActionLogin!: (credentials: Credential) => Promise<void>
 
   vSetCustomer!: (customer: string) => void
 
