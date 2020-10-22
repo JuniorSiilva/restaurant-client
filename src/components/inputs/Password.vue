@@ -1,7 +1,8 @@
 <template>
   <q-input
     v-model="password"
-    filled
+    dense
+    outlined
     :type="isPwd ? 'password' : 'text'"
     label="Senha"
     :error-message="errors[0]"
