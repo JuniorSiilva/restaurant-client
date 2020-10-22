@@ -4,6 +4,7 @@
       <div class="row">
         <h5 class="text-h5 text-white q-my-md">Restaurantes</h5>
       </div>
+
       <div class="row">
         <q-card square bordered class="q-pa-lg shadow-1">
           <ValidationObserver v-slot="{ passes }" ref="form" slim>

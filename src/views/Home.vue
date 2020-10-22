@@ -1,5 +1,7 @@
 <template>
-  <h1>Home</h1>
+  <q-page>
+    <h1>Home</h1>
+  </q-page>
 </template>
 
 <script lang="ts">

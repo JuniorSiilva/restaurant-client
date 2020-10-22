@@ -31,23 +31,49 @@ const preventUnauthenticatedAccess: NavigationGuard = (to: Route, from: Route, n
 const routes: Array<RouteConfig> = [
   {
     path: '/',
-    name: 'home',
-    component: () => import('../views/Home.vue'),
+    component: () => import('../components/layouts/PrivateLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'home',
+        component: () => import('../views/Home.vue'),
+        meta: {
+          title: 'Página inicial',
+        },
+      },
+    ],
     meta: {
-      title: 'Página inicial',
       requiresAuth: true,
     },
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('../views/SignIn.vue'),
-    beforeEnter: preventAuthenticatedAccess,
-    meta: {
-      title: 'Autenticação',
-    },
+    path: '/security',
+    component: () => import('../components/layouts/PublicLayout.vue'),
+    children: [
+      {
+        path: '/login',
+        name: 'login',
+        component: () => import('../views/SignIn.vue'),
+        beforeEnter: preventAuthenticatedAccess,
+        meta: {
+          title: 'Autenticação',
+        },
+      },
+    ],
   },
 ]
+
+// Always leave this as last one
+if (process.env.MODE !== 'ssr') {
+  routes.push({
+    path: '*',
+    name: 'error.notfound',
+    component: () => import('../views/errors/404.vue'),
+    meta: {
+      title: 'Página não encontrada',
+    },
+  })
+}
 
 const router = new VueRouter({
   mode: 'history',

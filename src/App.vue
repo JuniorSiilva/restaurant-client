@@ -1,23 +1,7 @@
 <template>
-  <q-layout view="lHh Lpr lFf">
-    <!-- <q-header elevated class="glossy">
-      <q-toolbar>
-        <q-avatar>
-          <img src="./assets/logo.png" />
-        </q-avatar>
-
-        <q-toolbar-title>
-          Quasar App
-        </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
-      </q-toolbar>
-    </q-header> -->
-
-    <q-page-container>
-      <router-view />
-    </q-page-container>
-  </q-layout>
+  <transition name="fade" mode="out-in">
+    <router-view />
+  </transition>
 </template>
 
 <script lang="ts">
@@ -27,4 +11,16 @@ import { Component, Vue } from 'vue-property-decorator'
 export default class App extends Vue {}
 </script>
 
-<style></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition-duration: 0.3s;
+  transition-property: opacity;
+  transition-timing-function: ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+</style>
