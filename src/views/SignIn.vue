@@ -6,23 +6,69 @@
       </div>
       <div class="row">
         <q-card square bordered class="q-pa-lg shadow-1">
-          <q-card-section>
-            <q-form class="q-gutter-md">
-              <q-input v-model="credentials.username" square filled clearable type="email" label="E-mail" />
-              <q-input v-model="credentials.password" square filled clearable type="password" label="Senha" />
+          <ValidationObserver v-slot="{ passes }" ref="form" slim>
+            <q-form @submit.prevent="passes(handle)">
+              <q-card-section>
+                <div class="q-gutter-md">
+                  <ValidationProvider
+                    v-if="tenanties.length > 0"
+                    ref="customer"
+                    v-slot="{ errors }"
+                    name="customer"
+                    rules="required"
+                  >
+                    <q-select
+                      v-model="tenancy"
+                      square
+                      filled
+                      :options="tenanties"
+                      label="Restaurante"
+                      option-value="slug_company"
+                      option-label="company"
+                      emit-value
+                      map-options
+                      :disable="tenanties.length == 1"
+                      :error-message="errors[0]"
+                      :error="!!errors[0]"
+                    />
+                  </ValidationProvider>
+
+                  <ValidationProvider ref="username" v-slot="{ errors }" name="username" rules="required|email">
+                    <q-input
+                      v-model="credentials.username"
+                      :readonly="!!tenancy || tenanties.length > 0"
+                      square
+                      filled
+                      clearable
+                      type="email"
+                      label="E-mail"
+                      :error-message="errors[0]"
+                      :error="!!errors[0]"
+                    >
+                      <template v-if="!!tenancy || tenanties.length > 0" v-slot:append>
+                        <q-icon name="edit" class="cursor-pointer" @click="updateEmail" />
+                      </template>
+                    </q-input>
+                  </ValidationProvider>
+
+                  <ValidationProvider v-if="!!tenancy" ref="password" v-slot="{ errors }" name="password" rules="required">
+                    <Password v-model="credentials.password" :errors="errors"></Password>
+                  </ValidationProvider>
+                </div>
+              </q-card-section>
+              <q-card-actions class="q-px-md">
+                <q-btn
+                  unelevated
+                  color="light-green-7"
+                  size="lg"
+                  class="full-width"
+                  :label="btnLabel"
+                  :loading="isLoading"
+                  type="submit"
+                />
+              </q-card-actions>
             </q-form>
-          </q-card-section>
-          <q-card-actions class="q-px-md">
-            <q-btn
-              unelevated
-              color="light-green-7"
-              size="lg"
-              class="full-width"
-              label="Entrar"
-              :loading="isLoading"
-              @click.prevent="signIn"
-            />
-          </q-card-actions>
+          </ValidationObserver>
         </q-card>
       </div>
     </div>
@@ -33,14 +79,24 @@
 import { ActionTypes } from '@/store/action-types'
 import { Credential } from '@/store/modules/auth/types'
 import { Component, Vue } from 'vue-property-decorator'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { Notify } from 'quasar'
 import { UnauthenticatedException } from '@/libs/axios/handlers/exceptions/UnauthenticatedException'
 import { AppException } from '@/libs/axios/handlers/exceptions/AppException'
+import Password from '../components/inputs/Password.vue'
+import { Tenanties, UserService } from '@/services/UserService'
+import { MutationTypes } from '@/store/mutation-types'
 
 @Component({
+  components: {
+    Password,
+  },
   methods: {
     ...mapActions('auth', { vActionLogin: ActionTypes.LOGIN }),
+    ...mapMutations('tenant', { vSetCustomer: MutationTypes.SET_CUSTOMER, vRemoveCustomer: MutationTypes.REMOVE_CUSTOMER }),
+  },
+  computed: {
+    ...mapGetters('tenant', { vCustomer: 'customer' }),
   },
 })
 export default class SignIn extends Vue {
@@ -49,9 +105,70 @@ export default class SignIn extends Vue {
     password: '',
   }
 
+  vCustomer!: string
+
+  tenanties: Tenanties[] = []
+
   isLoading = false
 
-  vActionLogin!: (credentials: Credential) => Promise<void>
+  get btnLabel() {
+    return this.tenancy ? 'Entrar' : 'Continuar'
+  }
+
+  get tenancy() {
+    return this.vCustomer
+  }
+
+  set tenancy(val) {
+    this.vSetCustomer(val)
+  }
+
+  created() {
+    this.vRemoveCustomer()
+  }
+
+  vActionLogin!: (credentials: Credential) => Promise<boolean>
+
+  vSetCustomer!: (customer: string) => void
+
+  vRemoveCustomer!: () => void
+
+  updateEmail() {
+    this.vRemoveCustomer()
+
+    this.tenanties = []
+  }
+
+  handle() {
+    if (this.tenancy) return this.signIn()
+
+    return this.checkUserTenanties()
+  }
+
+  async checkUserTenanties() {
+    this.isLoading = true
+
+    UserService.getUserTenanties(this.credentials.username)
+      .then(response => {
+        if (response.status === 200) {
+          const tenanties = response.data.tenanties
+
+          this.tenanties = tenanties
+
+          if (tenanties.length == 1) {
+            this.tenancy = tenanties[0].slug_company
+          }
+        } else {
+          Notify.create({ type: 'negative', message: 'Usuário não identificado' })
+        }
+      })
+      .catch((e: AppException) => {
+        Notify.create({ type: 'negative', message: e.getMessage() })
+      })
+      .then(() => {
+        this.isLoading = false
+      })
+  }
 
   async signIn() {
     this.isLoading = true

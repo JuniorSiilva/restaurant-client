@@ -4,8 +4,12 @@ import { rootInstance } from '../libs/axios'
 import { BaseService } from './Service'
 
 interface Service {
-  login(credentials: Credential): Promise<AxiosResponse>
-  logout(): Promise<AxiosResponse>
+  login(credentials: Credential): Promise<AxiosResponse<LoginResponse>>
+  logout(): Promise<AxiosResponse<void>>
+}
+
+interface LoginResponse {
+  token: string
 }
 
 const service: Service & BaseService = {
