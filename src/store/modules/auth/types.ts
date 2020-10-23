@@ -1,5 +1,5 @@
-import { MutationTypes } from '@/store/mutation-types'
-import { ActionTypes } from '@/store/action-types'
+import { MutationTypes } from '../../../store/mutation-types'
+import { ActionTypes } from '../../../store/action-types'
 
 interface State {
   token: string | null

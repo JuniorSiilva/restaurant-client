@@ -74,16 +74,17 @@
 </template>
 
 <script lang="ts">
-import { ActionTypes } from '@/store/action-types'
-import { Credential } from '@/store/modules/auth/types'
+import { ActionTypes } from '../store/action-types'
+import { Credential } from '../store/modules/auth/types'
 import { Component, Vue } from 'vue-property-decorator'
 import { mapActions, mapGetters, mapMutations } from 'vuex'
 import { Notify } from 'quasar'
-import { UnauthenticatedException } from '@/libs/axios/handlers/exceptions/UnauthenticatedException'
-import { AppException } from '@/libs/axios/handlers/exceptions/AppException'
+import { UnauthenticatedException } from '../libs/axios/handlers/exceptions/UnauthenticatedException'
+import { AppException } from '../libs/axios/handlers/exceptions/AppException'
 import Password from '../components/inputs/Password.vue'
-import { Tenanties, UserService } from '@/services/UserService'
-import { MutationTypes } from '@/store/mutation-types'
+import { UserService } from '../services/UserService'
+import { Customer } from '../models/customer'
+import { MutationTypes } from '../store/mutation-types'
 
 @Component({
   components: {
@@ -105,7 +106,7 @@ export default class SignIn extends Vue {
 
   vCustomer!: string
 
-  tenanties: Tenanties[] = []
+  tenanties: Customer[] = []
 
   isLoading = false
 

@@ -41,6 +41,14 @@ const routes: Array<RouteConfig> = [
           title: 'Página inicial',
         },
       },
+      {
+        path: '/dishes',
+        name: 'dishes',
+        component: () => import('../views/Dishes.vue'),
+        meta: {
+          title: 'Pratos',
+        },
+      },
     ],
     meta: {
       requiresAuth: true,

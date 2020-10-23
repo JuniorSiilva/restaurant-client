@@ -1,4 +1,4 @@
-import { Credential } from '@/store/modules/auth/types'
+import { Credential } from '../store/modules/auth/types'
 import { AxiosResponse } from 'axios'
 import { rootInstance } from '../libs/axios'
 import { BaseService } from './Service'

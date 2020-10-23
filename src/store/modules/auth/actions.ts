@@ -2,7 +2,7 @@ import { ActionTypes } from '../../action-types'
 import { MutationTypes } from '../../mutation-types'
 import { ActionTree } from 'vuex'
 import { State, Actions, Credential } from './types'
-import { AuthService } from '@/services/AuthService'
+import { AuthService } from '../../../services/AuthService'
 
 export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.LOGIN]({ commit }, credentials: Credential) {

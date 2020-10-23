@@ -1,11 +1,20 @@
 <template>
   <q-list>
-    <q-item to="/" active-class="q-item-no-link-highlighting">
+    <q-item :to="{ name: 'home' }" exact>
       <q-item-section avatar>
         <q-icon name="dashboard" />
       </q-item-section>
       <q-item-section>
         <q-item-label>Dashboard</q-item-label>
+      </q-item-section>
+    </q-item>
+
+    <q-item :to="{ name: 'dishes' }" exact>
+      <q-item-section avatar>
+        <q-icon name="fastfood" />
+      </q-item-section>
+      <q-item-section>
+        <q-item-label>Pratos</q-item-label>
       </q-item-section>
     </q-item>
 
@@ -88,15 +97,6 @@
         </q-item>
       </q-list>
     </q-expansion-item>
-
-    <q-item to="/Mail" active-class="q-item-no-link-highlighting">
-      <q-item-section avatar>
-        <q-icon name="email" />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>Mail</q-item-label>
-      </q-item-section>
-    </q-item>
 
     <q-item to="/TreeTable" active-class="q-item-no-link-highlighting">
       <q-item-section avatar>

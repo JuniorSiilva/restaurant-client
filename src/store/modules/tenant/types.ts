@@ -1,4 +1,4 @@
-import { MutationTypes } from '@/store/mutation-types'
+import { MutationTypes } from '../../../store/mutation-types'
 
 interface State {
   customer: string | null

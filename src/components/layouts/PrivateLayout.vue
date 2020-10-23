@@ -44,8 +44,8 @@
       show-if-above
       :mini="miniState"
       mini-to-overlay
-      :breakpoint="500"
-      bordered
+      :breakpoint="700"
+      elevated
       content-class="bg-grey-1"
       @mouseover="miniState = false"
       @mouseout="miniState = true"
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts">
-import { ActionTypes } from '@/store/action-types'
+import { ActionTypes } from '../../store/action-types'
 import { Component, Vue } from 'vue-property-decorator'
 import { mapActions, mapGetters } from 'vuex'
 import EssentialLink from '../EssentialLinks.vue'
